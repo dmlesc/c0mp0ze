@@ -6,7 +6,7 @@ services:
     image: prom/prometheus:v2.6.0
     volumes:
       - prometheus-data:/etc/prometheus/data
-      - ./prom/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitor
     # ports:
@@ -23,7 +23,7 @@ services:
       - prometheus
     image: grafana/grafana:5.4.2
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     networks:
       - monitor
     ports:
@@ -32,7 +32,7 @@ services:
 
 volumes:
   prometheus-data: {}
-  grafana-storage: {}
+  grafana-data: {}
 
 networks:
   monitor: {}
