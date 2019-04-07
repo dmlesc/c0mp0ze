@@ -1,17 +1,4 @@
-db:
-  container_name: mariadb
-  image: mariadb:10.4.3-bionic
-  volumes:
-    - db_data:/var/lib/mysql
-  restart: always
-  environment:
-    MYSQL_ROOT_PASSWORD: wordpress
-    MYSQL_DATABASE: wordpress
-    MYSQL_USER: wordpress
-    MYSQL_PASSWORD: wordpress
 
-
-    image: wordpress:5.1.1-php7.3-fpm-alpine
-
-
-RTpLEQJtl#8$T0H&aT
+wordpress
+  http://docker0:8000/wp-login.php
+    test:RTpLEQJtl#8$T0H&aT
