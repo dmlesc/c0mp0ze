@@ -1,4 +1,9 @@
 
 wordpress
-  http://docker0:8000/wp-login.php
-    test:RTpLEQJtl#8$T0H&aT
+  lxc copy base wordpress --container-only -c security.nesting=true
+  lxc start wordpress
+  ssh wordpress
+
+  http://wordpress:8000/wp-admin/install.php
+  http://wordpress:8000/wp-login.php
+    test:asdfasdf
