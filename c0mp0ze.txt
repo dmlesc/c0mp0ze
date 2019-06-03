@@ -1,9 +1,22 @@
+lxc copy base mon --container-only -c security.nesting=true
+lxc start mon
+ssh mon
 
-wordpress
-  lxc copy base wordpress --container-only -c security.nesting=true
-  lxc start wordpress
-  ssh wordpress
+git clone https://github.com/dmlesc/c0mp0ze.git
+cd c0mp0ze/m0n1t0r
+vim docker-compose.yml
+  edit: extra-hosts
+vim prometheus/prometheus.yml
+  edit: targets
+mkdir prometheus/data
+sudo chown nobody:nogroup prometheus/data
+mkdir grafana/data
+sudo chown 472:472 grafana/data
+docker-compose up -d
 
-  http://wordpress:8000/wp-admin/install.php
-  http://wordpress:8000/wp-login.php
-    test:asdfasdf
+http://mon:3000/login
+  Create API Key
+
+cd grafana
+python3 restore_datasources.py localhost [token]
+python3 restore_dashboards.py localhost [token]
