@@ -28,6 +28,7 @@ python3 restore_dashboards.py localhost [token]
 =======
 
 cd squid
+docker build -t squid .
 docker-compose up -d
 
 TODO

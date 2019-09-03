@@ -487,11 +487,3 @@ chown proxy:proxy /var/log/squid
 
 squidproxy | 2019/08/31 04:11:30| ERROR: /var/cache/squid/00: (2) No such file or directory
 squidproxy | 2019/08/31 04:11:30| Not currently OK to rewrite swap log.
-
-
-
-===================
- alpine apk docker
-===================
-
-docker build -t squid .
