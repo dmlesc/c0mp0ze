@@ -1,0 +1,497 @@
+=======
+ squid
+=======
+
+https://help.ubuntu.com/lts/serverguide/squid.html
+
+lxc copy base squid --container-only -c security.nesting=true
+lxc start squid
+ssh squid
+
+apt install build-essential libssl1.0-dev
+
+mkdir squid
+cd squid
+wget http://www.squid-cache.org/Versions/v4/squid-4.8.tar.gz
+wget http://www.squid-cache.org/Versions/v4/squid-4.8.tar.gz.asc
+
+sha1sum squid-4.8.tar.gz
+  fd03f97b018e4123d31b7d993017272a148cc44e  squid-4.8.tar.gz
+grep SHA1 squid-4.8.tar.gz.asc
+  SHA1: fd03f97b018e4123d31b7d993017272a148cc44e
+
+tar xvzf squid-4.8.tar.gz
+cd squid-4.8
+./configure --help
+  `configure' configures Squid Web Proxy 4.8 to adapt to many kinds of systems.
+
+  Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+  To assign environment variables (e.g., CC, CFLAGS...), specify them as
+  VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+  Defaults for the options are specified in brackets.
+
+  Configuration:
+    -h, --help              display this help and exit
+        --help=short        display options specific to this package
+        --help=recursive    display the short help of all the included packages
+    -V, --version           display version information and exit
+    -q, --quiet, --silent   do not print `checking ...' messages
+        --cache-file=FILE   cache test results in FILE [disabled]
+    -C, --config-cache      alias for `--cache-file=config.cache'
+    -n, --no-create         do not create output files
+        --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+  Installation directories:
+    --prefix=PREFIX         install architecture-independent files in PREFIX
+                            [/usr/local/squid]
+    --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                            [PREFIX]
+
+  By default, `make install' will install all the files in
+  `/usr/local/squid/bin', `/usr/local/squid/lib' etc.  You can specify
+  an installation prefix other than `/usr/local/squid' using `--prefix',
+  for instance `--prefix=$HOME'.
+
+  For better control, use the options below.
+
+  Fine tuning of the installation directories:
+    --bindir=DIR            user executables [EPREFIX/bin]
+    --sbindir=DIR           system admin executables [EPREFIX/sbin]
+    --libexecdir=DIR        program executables [EPREFIX/libexec]
+    --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+    --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+    --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+    --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+    --libdir=DIR            object code libraries [EPREFIX/lib]
+    --includedir=DIR        C header files [PREFIX/include]
+    --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+    --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+    --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+    --infodir=DIR           info documentation [DATAROOTDIR/info]
+    --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+    --mandir=DIR            man documentation [DATAROOTDIR/man]
+    --docdir=DIR            documentation root [DATAROOTDIR/doc/squid]
+    --htmldir=DIR           html documentation [DOCDIR]
+    --dvidir=DIR            dvi documentation [DOCDIR]
+    --pdfdir=DIR            pdf documentation [DOCDIR]
+    --psdir=DIR             ps documentation [DOCDIR]
+
+  Program names:
+    --program-prefix=PREFIX            prepend PREFIX to installed program names
+    --program-suffix=SUFFIX            append SUFFIX to installed program names
+    --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+  System types:
+    --build=BUILD     configure for building on BUILD [guessed]
+    --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+  Optional Features:
+    --disable-option-checking  ignore unrecognized --enable/--with options
+    --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+    --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+    --enable-silent-rules   less verbose build output (undo: "make V=1")
+    --disable-silent-rules  verbose build output (undo: "make V=0")
+    --enable-maintainer-mode
+                            enable make rules and dependencies not useful (and
+                            sometimes confusing) to the casual installer
+    --enable-dependency-tracking
+                            do not reject slow dependency extractors
+    --disable-dependency-tracking
+                            speeds up one-time build
+    --disable-arch-native   Some compilers offer CPU-specific optimizations with
+                            the -march=native parameter. This flag disables the
+                            optimization. The default is to auto-detect compiler
+                            support and use where available.
+    --disable-strict-error-checking
+                            By default squid is compiled with all possible
+                            static compiler error-checks enabled. This flag
+                            disables the behavior
+    --disable-loadable-modules
+                            do not support loadable modules
+    --enable-shared[=PKGS]  build shared libraries [default=yes]
+    --enable-static[=PKGS]  build static libraries [default=yes]
+    --enable-fast-install[=PKGS]
+                            optimize for fast installation [default=yes]
+    --disable-libtool-lock  avoid locking (might break parallel builds)
+    --enable-ltdl-install   install libltdl
+    --enable-build-info="build info string"
+                            Add an additional string in the output of "squid
+                            -v". Default is not to add anything. If the string
+                            is not specified, tries to determine nick and
+                            revision number of the current bazaar branch
+    --disable-optimizations Do not compile Squid with compiler optimizations
+                            enabled. Optimization is good for production builds,
+                            but not good for debugging. During development, use
+                            --disable-optimizations to reduce compilation times
+                            and allow easier debugging. This option implies
+                            --disable-inline
+    --disable-inline        Do not compile trivial methods as inline. Squid is
+                            coded with much of the code able to be inlined.
+                            Inlining is good for production builds, but not good
+                            for development. During development, use
+                            --disable-inline to reduce compilation times and
+                            allow incremental builds to be quick. For production
+                            builds, or load tests, use --enable-inline to have
+                            squid make all trivial methods inlinable by the
+                            compiler.
+    --enable-debug-cbdata   Provide some debug information in cbdata
+    --enable-xmalloc-statistics
+                            Show malloc statistics in status page
+    --enable-disk-io="list of modules"
+                            Build support for the list of disk I/O modules. Set
+                            without a value or omitted, all available modules
+                            will be built. See src/DiskIO for a list of
+                            available modules, or Programmers Guide section on
+                            DiskIO for details on how to build your custom disk
+                            module
+    --enable-storeio="list of modules"
+                            Build support for the list of store I/O modules. The
+                            default is only to build the "ufs" module. See
+                            src/fs for a list of available modules, or
+                            Programmers Guide section <not yet written> for
+                            details on how to build your custom store module
+    --enable-removal-policies="list of policies"
+                            Build support for the list of removal policies. The
+                            default is only to build the "lru" module. See
+                            src/repl for a list of available modules, or
+                            Programmers Guide section 9.9 for details on how to
+                            build your custom policy
+    --enable-icmp           Enable ICMP pinging and Network Measurement
+    --enable-delay-pools    Enable delay pools to limit bandwidth usage
+    --disable-esi           Disable ESI for accelerators. ESI requires expat or
+                            libxml2. Enabling ESI will cause squid reverse
+                            proxies to be capable of the Edge Acceleration
+                            Specification (www.esi.org).
+    --disable-icap-client   Disable the ICAP client.
+    --enable-ecap           support loadable content adaptation modules
+    --disable-wccp          Disable Web Cache Coordination Protocol
+    --disable-wccpv2        Disable Web Cache Coordination V2 Protocol
+    --enable-kill-parent-hack
+                            Kill parent on shutdown
+    --disable-snmp          Disable SNMP monitoring support
+    --enable-cachemgr-hostname=hostname
+                            Make cachemgr.cgi default to this host. If
+                            unspecified, uses the name of the build-host
+    --disable-eui           Disable use of ARP / MAC/ EUI (ether address)
+    --disable-htcp          Disable HTCP protocol support
+    --enable-forw-via-db    Enable Forw/Via database
+    --enable-cache-digests  Use Cache Digests. See
+                            http://wiki.squid-cache.org/SquidFaq/CacheDigests
+    --disable-select        Disable select(2) support.
+    --disable-poll          Disable poll(2) support.
+    --disable-kqueue        Disable kqueue(2) support.
+    --disable-epoll         Disable Linux epoll(2) support.
+    --disable-devpoll       Disable Solaris /dev/poll support.
+    --disable-http-violations
+                            This allows you to remove code which is known to
+                            violate the HTTP protocol specification.
+    --enable-ipfw-transparent
+                            Enable Transparent Proxy support for systems using
+                            FreeBSD IPFW-style firewalling.
+    --enable-ipf-transparent
+                            Enable Transparent Proxy support using
+                            IPFilter-style firewalling
+    --enable-pf-transparent Enable Transparent Proxy support for systems using
+                            PF network address redirection.
+    --enable-linux-netfilter
+                            Enable Transparent Proxy support for Linux
+                            (Netfilter)
+    --enable-leakfinder     Enable Leak Finding code. Enabling this alone does
+                            nothing; you also have to modify the source code to
+                            use the leak finding functions. Probably Useful for
+                            hackers only.
+    --enable-follow-x-forwarded-for
+                            Enable support for following the X-Forwarded-For
+                            HTTP header to try to find the IP address of the
+                            original or indirect client when a request has been
+                            forwarded through other proxies.
+    --disable-ident-lookups Remove code that supports performing Ident (RFC 931)
+                            lookups.
+    --enable-default-hostsfile=path
+                            Select default location for hosts file. See
+                            hosts_file directive in squid.conf for details
+    --enable-auth           Build global support for authentication. The list of
+                            schemes and helpers to be enabled is defined
+                            elsewhere
+    --enable-auth-basic="list of helpers"
+                            Enable the basic authentication scheme, and build
+                            the specified helpers. Not providing an explicit
+                            list of helpers will attempt build of all possible
+                            helpers. Default is to do so. To disable the basic
+                            authentication scheme, use --disable-auth-basic. To
+                            enable but build no helpers, specify "none". To see
+                            available helpers, see the src/auth/basic/
+                            directory.
+    --enable-auth-digest="list of helpers"
+                            Enable the Digest authentication scheme, and build
+                            the specified helpers. Not providing an explicit
+                            list of helpers will attempt build of all possible
+                            helpers. Default is to do so. To disable the Digest
+                            authentication scheme, use --disable-auth-digest. To
+                            enable but build no helpers, specify "none". To see
+                            available helpers, see the src/auth/digest/
+                            directory.
+    --enable-auth-negotiate="list of helpers"
+                            Enable the Negotiate authentication scheme, and
+                            build the specified helpers. Not providing an
+                            explicit list of helpers will attempt build of all
+                            possible helpers. Default is to do so. To disable
+                            the Negotiate authentication scheme, use
+                            --disable-auth-negotiate. To enable but build no
+                            helpers, specify "none". To see available helpers,
+                            see the src/auth/negotiate/ directory.
+    --enable-auth-ntlm="list of helpers"
+                            Enable the NTLM authentication scheme, and build the
+                            specified helpers. Not providing an explicit list of
+                            helpers will attempt build of all possible helpers.
+                            Default is to do so. To disable the NTLM
+                            authentication scheme, use --disable-auth-ntlm. To
+                            enable but build no helpers, specify "none". To see
+                            available helpers, see the src/auth/ntlm/ directory.
+    --enable-log-daemon-helpers="list of helpers"
+                            This option selects which logging daemon helpers to
+                            build and install as part of the normal build
+                            process For a list of available helpers see the
+                            src/log/ directory.
+    --enable-external-acl-helpers="list of helpers"
+                            Enable external_acl helpers support and the helpers
+                            themselves. Default is to build all buildable
+                            helpers and enable support. To disable support, use
+                            --disable-external-acl-helpers. To build no helpers,
+                            specify "none". To see available helpers, see the
+                            src/acl/external/ directory
+    --enable-url-rewrite-helpers="list of helpers"
+                            This option selects which url_rewrite helpers to
+                            build and install as part of the normal build
+                            process. The default is to attempt the build of all
+                            possible helpers. Use --disable-url-rewrite-helpers
+                            to build none. For a list of available helpers see
+                            the src/http/url_rewriters/ directory.
+    --enable-security-cert-validators="list of helpers"
+                            This option selects which security certificate
+                            validator helpers to build and install as part of
+                            the normal build process. The default is to attempt
+                            the build of all possible helpers. Use
+                            --disable-security-cert-validators to build none.
+                            For a list of available helpers see the
+                            src/security/cert_validators/ directory.
+    --enable-security-cert-generators="list of helpers"
+                            This option selects which security certificate
+                            validator helpers to build and install as part of
+                            the normal build process. The default is to attempt
+                            the build of all possible helpers. Use
+                            --disable-security-cert-genrators to build none. For
+                            a list of available helpers see the
+                            src/security/cert_generators/ directory.
+    --enable-ssl-crtd       Prevent Squid from directly generating TLS/SSL
+                            private key and certificate. Instead enables the
+                            certificate generator processes.
+    --enable-storeid-rewrite-helpers="list of helpers"
+                            This option selects which Store-ID rewrite helpers
+                            to build and install as part of the normal build
+                            process. The default is to attempt the build of all
+                            possible helpers. Use
+                            --disable-storeid-rewrite-helpers to build none. For
+                            a list of available helpers see the
+                            src/store/id_rewriters/ directory.
+    --enable-win32-service  Compile Squid as a WIN32 Service. Works only on
+                            MS-Windows platforms
+    --disable-unlinkd       Do not use unlinkd
+    --enable-stacktraces    Enable automatic call backtrace on fatal errors
+    --enable-cpu-profiling  Enable instrumentation to try and understand how CPU
+                            power is spent by squid, by enabling specific probes
+                            in selected functions. New probes can only be added
+                            by modifying the source code. It is meant to help
+                            developers in optimizing performance of Squid
+                            internal functions. If you are not developer you
+                            should not enable this, as it slows squid down
+                            somewhat. See lib/Profiler.c for more details.
+    --enable-x-accelerator-vary
+                            Enable support for the X-Accelerator-Vary HTTP
+                            header. Can be used to indicate variance within an
+                            accelerator setup. Typically used together with
+                            other code that adds custom HTTP headers to the
+                            requests.
+    --disable-ipv6          Disable IPv6 support. The default is to probe system
+                            capabilities on startup.
+    --enable-zph-qos        Enable ZPH QOS support
+    --enable-gnuregex       Compile GNUregex. Unless you have reason to use this
+                            option, you should not enable it. This library file
+                            is usually only required on Windows and very old
+                            Unix boxes which do not have their own regex library
+                            built in.
+    --enable-translation    Generate the localized error page templates and
+                            manuals. Which can also be downloaded from
+                            http://www.squid-cache.org/Versions/langpack/.
+    --disable-auto-locale   This prevents Squid providing localized error pages
+                            based on the clients request headers. When disabled
+                            Squid requires explicit language configuration.
+
+  Optional Packages:
+    --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+    --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+    --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                            both]
+    --with-aix-soname=aix|svr4|both
+                            shared library versioning (aka "SONAME") variant to
+                            provide on AIX, [default=aix].
+    --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+    --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                            compiler's sysroot if not specified).
+    --with-included-ltdl    use the GNU ltdl sources included here
+    --with-ltdl-include=DIR use the ltdl headers installed in DIR
+    --with-ltdl-lib=DIR     use the libltdl.la installed in DIR
+    --with-default-user=USER
+                            System user account for squid permissions. Default:
+                            nobody
+    --with-logdir=PATH      Default location for squid logs. default:
+                            PREFIX/var/logs
+    --with-pidfile=PATH     Default location for squid pid file. Default:
+                            PREFIX/var/run/squid.pid
+    --with-swapdir=PATH     Default location for squid cache directories.
+                            Default: PREFIX/var/cache/squid
+    --with-aufs-threads=N_THREADS
+                            Tune the number of worker threads for the aufs
+                            object store.
+    --with-dl               Use dynamic linking
+    --without-pthreads      Disable POSIX Threads
+    --without-aio           Do not use POSIX AIO. Default: auto-detect
+    --without-expat         Do not use expat for ESI. Default: auto-detect
+    --without-libxml2       Do not use libxml2 for ESI. Default: auto-detect
+    --without-nettle        Compile without the Nettle crypto library.
+    --without-gnutls        Do not use GnuTLS for SSL. Default: auto-detect
+    --with-openssl=PATH     Compile with the OpenSSL libraries. The path to the
+                            OpenSSL development libraries and headers
+                            installation can be specified if outside of the
+                            system standard directories
+    --without-mit-krb5      Compile without MIT Kerberos support.
+    --without-heimdal-krb5  Compile without Heimdal Kerberos support.
+    --without-gnugss        Compile without the GNU gss libraries.
+    --with-nat-devpf        Enable /dev/pf support for NAT on older OpenBSD and
+                            FreeBSD kernels.
+    --without-netfilter-conntrack
+                            Do not use Netfilter conntrack libraries for packet
+                            marking. A path to alternative library location may
+                            be specified by using
+                            --with-netfilter-conntrack=PATH. Default:
+                            auto-detect.
+    --with-large-files      Enable support for large files (logs etc).
+    --with-build-environment=model
+                            The build environment to use. Normally one of
+                            POSIX_V6_ILP32_OFF32 (32 bits),
+                            POSIX_V6_ILP32_OFFBIG (32 bits with large file
+                            support), POSIX_V6_LP64_OFF64 (64 bits),
+                            POSIX_V6_LPBIG_OFFBIG (large pointers and files),
+                            XBS5_ILP32_OFF32 i(legacy, 32 bits),
+                            XBS5_ILP32_OFFBIG (legacy, 32 bits with large file
+                            support), XBS5_LP64_OFF64 (legacy, 64 bits),
+                            XBS5_LPBIG_OFFBIG (legacy, large pointers and files)
+                            or default (The default for your OS)
+    --with-valgrind-debug   Include debug instrumentation for use with valgrind
+    --without-cppunit       Do not use cppunit test framework
+    --without-libcap        disable usage of Linux capabilities library to
+                            control privileges
+
+    --with-filedescriptors=NUMBER
+                            Force squid to support NUMBER filedescriptors
+    --with-po2html=[[PATH]]
+                            absolute path to po2html executable
+    --with-po2txt=[[PATH]]
+                            absolute path to po2txt executable
+
+  Some influential environment variables:
+    CC          C compiler command
+    CFLAGS      C compiler flags
+    LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+                nonstandard directory <lib dir>
+    LIBS        libraries to pass to the linker, e.g. -l<library>
+    CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+                you have headers in a nonstandard directory <include dir>
+    CXX         C++ compiler command
+    CXXFLAGS    C++ compiler flags
+    BUILDCXX    path to compiler for building compile-time tools. e.g. cf_gen
+    CXXCPP      C++ preprocessor
+    CPP         C preprocessor
+    PKG_CONFIG  path to pkg-config utility
+    PKG_CONFIG_PATH
+                directories to add to pkg-config's search path
+    PKG_CONFIG_LIBDIR
+                path overriding pkg-config's built-in search path
+    LT_SYS_LIBRARY_PATH
+                User-defined run-time library search path.
+    LIBXML2_CFLAGS
+                C compiler flags for LIBXML2, overriding pkg-config
+    LIBXML2_LIBS
+                linker flags for LIBXML2, overriding pkg-config
+    EXT_LIBECAP_CFLAGS
+                C compiler flags for EXT_LIBECAP, overriding pkg-config
+    EXT_LIBECAP_LIBS
+                linker flags for EXT_LIBECAP, overriding pkg-config
+    LIBGNUTLS_CFLAGS
+                C compiler flags for LIBGNUTLS, overriding pkg-config
+    LIBGNUTLS_LIBS
+                linker flags for LIBGNUTLS, overriding pkg-config
+    LIBOPENSSL_CFLAGS
+                C compiler flags for LIBOPENSSL, overriding pkg-config
+    LIBOPENSSL_LIBS
+                linker flags for LIBOPENSSL, overriding pkg-config
+    LIB_KRB5_CFLAGS
+                C compiler flags for LIB_KRB5, overriding pkg-config
+    LIB_KRB5_LIBS
+                linker flags for LIB_KRB5, overriding pkg-config
+    LIBCPPUNIT_CFLAGS
+                C compiler flags for LIBCPPUNIT, overriding pkg-config
+    LIBCPPUNIT_LIBS
+                linker flags for LIBCPPUNIT, overriding pkg-config
+    PO2HTML     Absolute path to po2html executable
+    PO2TEXT     Absolute path to po2txt executable
+    BUILDCXXFLAGS
+                C++ compiler flags for building compile-time tools. e.g. cf_gen
+
+  Use these variables to override the choices made by `configure' or to help
+  it to find libraries and programs with nonstandard names/locations.
+
+  Report bugs to <http://bugs.squid-cache.org/>.
+
+./configure \
+  --prefix=/usr \
+  --localstatedir=/var \
+  --libexecdir=${prefix}/lib/squid \
+  --datadir=${prefix}/share/squid \
+  --sysconfdir=/etc/squid \
+  --with-default-user=proxy \
+  --with-logdir=/var/log/squid \
+  --with-pidfile=/var/run/squid.pid \
+  --with-openssl \
+  --enable-xmalloc-statistics \
+  --enable-async-io \
+  --disable-icap-client \
+  --disable-wccp \
+  --disable-wccpv2 \
+  --enable-kill-parent-hack \
+  --disable-htcp \
+  --disable-ident-lookups \
+  --disable-devpoll \
+  --disable-http-violations \
+  --without-mit-krb5 \
+  --without-heimdal-krb5
+
+make
+make install
+
+chown proxy:proxy /var/log/squid
+
+
+
+squidproxy | 2019/08/31 04:11:30| ERROR: /var/cache/squid/00: (2) No such file or directory
+squidproxy | 2019/08/31 04:11:30| Not currently OK to rewrite swap log.
+
+
+
+===================
+ alpine apk docker
+===================
+
+docker build -t squid .

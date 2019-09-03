@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  squid:
+    container_name: "squid"
+    image: "squid"
+    ports:
+      - "3128:3128"
+    restart: always
