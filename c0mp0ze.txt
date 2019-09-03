@@ -21,7 +21,22 @@ http://localhost:3000/login
 python3 restore_datasources.py localhost [token]
 python3 restore_dashboards.py localhost [token]
 
+TODO
+  make new dashboards
+  use latest grafana/prometheus
 
+
+==============
+ elasticstack
+==============
+
+cd elasticstack
+mkdir -p data/
+chown 1000:1000 data/
+docker-compose up -d
+
+TODO
+  add elasticsearch_exporter
 
 =======
  squid
