@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: mariadb
+    image: mariadb:10.4.3-bionic
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: asdfasdf
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: asdfasdf

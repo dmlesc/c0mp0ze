@@ -20,3 +20,27 @@ http://mon:3000/login
 cd grafana
 python3 restore_datasources.py localhost [token]
 python3 restore_dashboards.py localhost [token]
+
+
+
+=======
+ squid
+=======
+
+cd squid
+docker-compose up -d
+
+TODO
+  make cache dir
+
+
+=========
+ mariadb
+=========
+
+cd mariadb
+mkdir data
+docker-compose up -d
+
+TODO
+  add mysqld_exporter
