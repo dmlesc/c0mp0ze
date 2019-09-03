@@ -47,6 +47,7 @@ docker build -t squid .
 docker-compose up -d
 
 TODO
+  format logs, send to fluentd
   make cache dir
 
 
@@ -60,3 +61,16 @@ docker-compose up -d
 
 TODO
   add mysqld_exporter
+
+
+=========
+ fluentd
+=========
+
+cd fluentd
+docker-compose up -d
+
+TODO
+  config for syslog
+  config for docker
+  config for elasticstack output
