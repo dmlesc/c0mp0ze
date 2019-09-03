@@ -1,23 +1,23 @@
-lxc copy base mon --container-only -c security.nesting=true
-lxc start mon
-ssh mon
 
 git clone https://github.com/dmlesc/c0mp0ze.git
-cd c0mp0ze/m0n1t0r
-vim docker-compose.yml
-  edit: extra-hosts
-vim prometheus/prometheus.yml
-  edit: targets
-mkdir prometheus/data
-sudo chown nobody:nogroup prometheus/data
-mkdir grafana/data
-sudo chown 472:472 grafana/data
+
+============
+ prometheus
+============
+
+cd prometheus
+vim prometheus.yml
+  edit: node/targets
+
+mkdir data_prometheus
+sudo chown nobody:nogroup data_prometheus
+mkdir data_grafana
+sudo chown 472:472 data_grafana
 docker-compose up -d
 
-http://mon:3000/login
+http://localhost:3000/login
   Create API Key
 
-cd grafana
 python3 restore_datasources.py localhost [token]
 python3 restore_dashboards.py localhost [token]
 
