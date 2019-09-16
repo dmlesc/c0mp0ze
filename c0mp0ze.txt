@@ -21,10 +21,6 @@ http://localhost:3000/login
 python3 restore_datasources.py localhost [token]
 python3 restore_dashboards.py localhost [token]
 
-TODO
-  make new dashboards
-  use latest grafana/prometheus
-
 
 ==============
  elasticstack
@@ -35,8 +31,14 @@ mkdir -p data/
 chown 1000:1000 data/
 docker-compose up -d
 
-TODO
-  add elasticsearch_exporter
+http://localhost:5601/
+
+curl localhost:9114/metrics
+prometheus.yml - elasticsearch_exporter
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['es:9114']
+
 
 =======
  squid
