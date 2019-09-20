@@ -34,10 +34,15 @@ docker-compose up -d
 http://localhost:5601/
 
 curl localhost:9114/metrics
-prometheus.yml - elasticsearch_exporter
+
+../prometheus/prometheus.yml - elasticsearch_exporter
   - job_name: 'elasticsearch'
     static_configs:
       - targets: ['es:9114']
+
+../prometheus/docker-compose.yml
+  extra_hosts:
+    - "es:10.0.0.10"
 
 
 =======
@@ -76,3 +81,55 @@ TODO
   config for syslog
   config for docker
   config for elasticstack output
+
+
+
+/fluentd/etc $ cat fluent.conf
+  <source>
+    @type  forward
+    @id    input1
+    @label @mainstream
+    port  24224
+  </source>
+
+  <filter **>
+    @type stdout
+  </filter>
+
+  <label @mainstream>
+    <match docker.**>
+      @type file
+      @id   output_docker1
+      path         /fluentd/log/docker.*.log
+      symlink_path /fluentd/log/docker.log
+      append       true
+      time_slice_format %Y%m%d
+      time_slice_wait   1m
+      time_format       %Y%m%dT%H%M%S%z
+    </match>
+    <match **>
+      @type file
+      @id   output1
+      path         /fluentd/log/data.*.log
+      symlink_path /fluentd/log/data.log
+      append       true
+      time_slice_format %Y%m%d
+      time_slice_wait   10m
+      time_format       %Y%m%dT%H%M%S%z
+    </match>
+  </label>
+
+*.* @127.0.0.1:5140
+
+
+mkdir custom-fluentd
+cd custom-fluentd
+curl https://raw.githubusercontent.com/fluent/fluentd-docker-image/master/v1.7/OS-onbuild/fluent.conf > fluent.conf
+
+# Create plugins directory. plugins scripts put here will be copied to the new image.
+mkdir plugins
+
+curl https://raw.githubusercontent.com/fluent/fluentd-docker-image/master/Dockerfile.sample > Dockerfile
+
+
+http://localhost:9200/_cat/indices?v

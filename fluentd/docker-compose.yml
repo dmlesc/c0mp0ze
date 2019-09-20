@@ -3,9 +3,10 @@ version: '3.7'
 services:
 
   fluentd:
-    image: fluent/fluentd:v1.3.3-1.0
+    build: .
     container_name: fluentd
     ports:
+      - "5140:5140/udp"
       - "24224:24224"
       - "24224:24224/udp"
     restart: always
