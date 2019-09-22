@@ -12,8 +12,14 @@ services:
       - "9090:9090"
     command:
       - '--storage.tsdb.retention.time=365d'
-    # extra_hosts:
-    #   - "esc:10.0.0.10"
+      - '--log.format=json'
+    extra_hosts:
+      - "es:10.0.0.31"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.prometheus
     restart: always
 
   grafana:
@@ -25,4 +31,9 @@ services:
       - ./data_grafana:/var/lib/grafana
     ports:
       - "3000:3000"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.grafana
     restart: always

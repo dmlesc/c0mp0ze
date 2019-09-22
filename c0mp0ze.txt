@@ -75,7 +75,22 @@ TODO
 =========
 
 cd fluentd
-docker-compose up -d
+docker-compose up -d --build
+
+vim /etc/rsyslog.d/50-default.conf
+  *.* @127.0.0.1:5140
+
+systemctl restart rsyslog
+
+timedatectl set-timezone UTC
+
+vim /etc/docker/daemon.json
+  {
+    "log-driver": "fluentd",
+    "log-opts": {
+      "fluentd-address": "localhost:24224"
+    }
+  }
 
 TODO
   config for syslog
