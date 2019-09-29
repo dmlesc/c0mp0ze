@@ -93,9 +93,9 @@ vim /etc/docker/daemon.json
   }
 
 TODO
-  config for syslog
   config for docker
   config for elasticstack output
+  monitor w/prometheus
 
 
 
