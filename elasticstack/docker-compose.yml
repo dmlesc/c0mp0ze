@@ -8,51 +8,54 @@ services:
     volumes:
       - ./data/:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'
     environment:
       - discovery.type=single-node
       - node.name=esc
       - cluster.name=esc
-      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+      - 'ES_JAVA_OPTS=-Xms4g -Xmx4g'
     ulimits:
       nproc: 4096
       nofile:
         soft: 65536
         hard: 65536
     logging:
-      driver: "fluentd"
+      driver: 'fluentd'
       options:
         fluentd-address: localhost:24224
-        tag: elasticsearch
+        tag: json
     restart: always
 
+  elasticsearch_exporter:
+    image: justwatch/elasticsearch_exporter:1.1.0
+    container_name: elasticsearch_exporter
+    depends_on:
+      - elasticsearch
+    ports:
+      - '9114:9114'
+    command:
+      - '--es.uri=http://elasticsearch:9200'
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: localhost:24224
+        tag: elasticsearch_exporter
+    restart: always
+  
   kibana:
     image: kibana:7.3.1
     container_name: kibana
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601"
+      - '5601:5601'
     environment:
-      - "XPACK_MONITORING_ENABLED=false"
+      - 'XPACK_MONITORING_ENABLED=false'
+      - 'ELASTICSEARCH_REQUESTTIMEOUT=60000'
     logging:
-      driver: "fluentd"
+      driver: 'fluentd'
       options:
         fluentd-address: localhost:24224
-        tag: kibana
-    restart: always
-
-  elasticsearch_exporter:
-    image: justwatch/elasticsearch_exporter:1.1.0
-    container_name: elasticsearch_exporter
-    ports:
-      - "9114:9114"
-    command:
-      - '--es.uri=http://elasticsearch:9200'
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: elasticsearch_exporter
+        tag: json
     restart: always

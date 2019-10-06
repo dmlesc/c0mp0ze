@@ -19,4 +19,4 @@ scrape_configs:
         - esc:9100
   - job_name: 'elasticsearch'
     static_configs:
-      - targets: ['es:9114']
+      - targets: ['esc:9114']
