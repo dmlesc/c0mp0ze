@@ -40,7 +40,7 @@ services:
       driver: 'fluentd'
       options:
         fluentd-address: localhost:24224
-        tag: elasticsearch_exporter
+        tag: kv
     restart: always
   
   kibana:

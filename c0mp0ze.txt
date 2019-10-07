@@ -1,6 +1,4 @@
 
-git clone https://github.com/dmlesc/c0mp0ze.git
-
 ============
  prometheus
 ============
@@ -104,9 +102,10 @@ vim /etc/rsyslog.d/50-default.conf
 systemctl restart rsyslog
 timedatectl set-timezone UTC
 
-
-TODO
-  monitor w/prometheus
+../prometheus/prometheus.yml - fluentd monitor
+  - job_name: 'fluentd'
+    static_configs:
+      - targets: ['localhost:24231']
 
 
 =========

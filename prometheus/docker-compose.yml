@@ -35,5 +35,5 @@ services:
       driver: 'fluentd'
       options:
         fluentd-address: localhost:24224
-        tag: grafana
+        tag: kv
     restart: always
