@@ -1,0 +1,16 @@
+{
+  "index_patterns": ["docker-*"],
+  "settings": {
+    "number_of_shards": 4,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "_source": { "enabled": true },
+    "properties": {
+      "container_name": { "type": "keyword" },
+      "container_id": { "type": "text" },
+      "log": { "type": "text" },
+      "source": { "type": "keyword" }
+    }
+  }
+}

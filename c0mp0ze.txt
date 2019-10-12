@@ -45,23 +45,12 @@ curl localhost:9114/metrics
 
 http://localhost:9200/_cat/indices?v
 
-curl -X DELETE "localhost:9200/docker*?pretty"
 curl -X DELETE "localhost:9200/syslog*?pretty"
+curl -X DELETE "localhost:9200/docker*?pretty"
+curl -X DELETE "localhost:9200/squid*?pretty"
 
-curl -X PUT "localhost:9200/_template/docker?pretty" -H 'Content-Type: application/json' -d'
-{
-  "index_patterns": ["docker-*", "syslog-*"],
-  "settings": {
-    "number_of_shards": 4,
-    "number_of_replicas": 0
-  },
-  "mappings": {
-    "_source": {
-      "enabled": true
-    }
-  }
-}
-'
+curl -X PUT 'localhost:9200/_template/docker?pretty' -H 'Content-Type: application/json' --data-binary @template_docker.json
+curl -X PUT 'localhost:9200/_template/squid?pretty' -H 'Content-Type: application/json' --data-binary @template_squid.json
 
 
 =======
@@ -73,7 +62,6 @@ docker build -t squid .
 docker-compose up -d
 
 TODO
-  format logs, send to fluentd
   make cache dir
 
 
@@ -101,11 +89,6 @@ vim /etc/rsyslog.d/50-default.conf
 
 systemctl restart rsyslog
 timedatectl set-timezone UTC
-
-../prometheus/prometheus.yml - fluentd monitor
-  - job_name: 'fluentd'
-    static_configs:
-      - targets: ['localhost:24231']
 
 
 =========

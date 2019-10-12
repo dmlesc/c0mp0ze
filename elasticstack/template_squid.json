@@ -1,0 +1,24 @@
+{
+  "index_patterns": ["squid-*"],
+  "settings": {
+    "number_of_shards": 4,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "_source": { "enabled": true },
+    "properties": {
+      "container_name": { "type": "keyword" },
+      "container_id": { "type": "text" },
+      "log": { "type": "text" },
+      "source": { "type": "keyword" },
+      "c_ip": { "type": "keyword" },
+      "s_ip": { "type": "keyword" },
+      "cache_status": { "type": "keyword" },
+      "http_status": { "type": "keyword" },
+      "elapsed": { "type": "integer" },
+      "bytes": { "type": "integer" },
+      "url": { "type": "keyword" },
+      "type": { "type": "keyword" }
+    }
+  }
+}

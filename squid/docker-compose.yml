@@ -1,9 +1,16 @@
 version: "3.7"
 
 services:
+
   squid:
+    build: .
     container_name: "squid"
     image: "squid"
     ports:
       - "3128:3128"
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: localhost:24225
+        tag: squid
     restart: always

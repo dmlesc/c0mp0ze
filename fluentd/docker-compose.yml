@@ -8,7 +8,7 @@ services:
     ports:
       - '5140:5140/udp'
       - '24224:24224'
-      - '24231:24231'
+      - '24225:24225'
     extra_hosts:
       - 'esc:10.0.0.31'
     restart: always
