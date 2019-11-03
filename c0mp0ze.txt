@@ -1,23 +1,16 @@
 
-============
- prometheus
-============
+=========
+ fluentd
+=========
 
-cd prometheus
-vim prometheus.yml
-  edit: node/targets
+cd fluentd
+docker-compose up -d --build
 
-mkdir data_prometheus
-sudo chown nobody:nogroup data_prometheus
-mkdir data_grafana
-sudo chown 472:472 data_grafana
-docker-compose up -d
+vim /etc/rsyslog.d/50-default.conf
+  *.* @127.0.0.1:5140
 
-http://localhost:3000/login
-  Create API Key
-
-python3 restore_datasources.py localhost [token]
-python3 restore_dashboards.py localhost [token]
+systemctl restart rsyslog
+timedatectl set-timezone UTC
 
 
 ==============
@@ -53,6 +46,27 @@ curl -X PUT 'localhost:9200/_template/docker?pretty' -H 'Content-Type: applicati
 curl -X PUT 'localhost:9200/_template/squid?pretty' -H 'Content-Type: application/json' --data-binary @template_squid.json
 
 
+============
+ prometheus
+============
+
+cd prometheus
+vim prometheus.yml
+  edit: node/targets
+
+mkdir data_prometheus
+sudo chown nobody:nogroup data_prometheus
+mkdir data_grafana
+sudo chown 472:472 data_grafana
+docker-compose up -d
+
+http://localhost:3000/login
+  Create API Key
+
+python3 restore_datasources.py localhost [token]
+python3 restore_dashboards.py localhost [token]
+
+
 =======
  squid
 =======
@@ -77,18 +91,6 @@ TODO
   add mysqld_exporter
 
 
-=========
- fluentd
-=========
-
-cd fluentd
-docker-compose up -d --build
-
-vim /etc/rsyslog.d/50-default.conf
-  *.* @127.0.0.1:5140
-
-systemctl restart rsyslog
-timedatectl set-timezone UTC
 
 
 =========
