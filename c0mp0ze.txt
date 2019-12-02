@@ -19,7 +19,7 @@ timedatectl set-timezone UTC
 
 cd elasticstack
 mkdir -p data/
-chown 1000:1000 data/
+sudo chown 1000:1000 data/
 docker-compose up -d
 
 http://localhost:5601/
@@ -38,13 +38,15 @@ curl localhost:9114/metrics
 
 http://localhost:9200/_cat/indices?v
 
+curl -X PUT 'localhost:9200/_template/docker?pretty' -H 'Content-Type: application/json' --data-binary @template_docker.json
+curl -X PUT 'localhost:9200/_template/squid?pretty' -H 'Content-Type: application/json' --data-binary @template_squid.json
+
 curl -X DELETE "localhost:9200/syslog*?pretty"
 curl -X DELETE "localhost:9200/docker*?pretty"
 curl -X DELETE "localhost:9200/squid*?pretty"
 
-curl -X PUT 'localhost:9200/_template/docker?pretty' -H 'Content-Type: application/json' --data-binary @template_docker.json
-curl -X PUT 'localhost:9200/_template/squid?pretty' -H 'Content-Type: application/json' --data-binary @template_squid.json
-
+TODO
+  syslog template
 
 ============
  prometheus
