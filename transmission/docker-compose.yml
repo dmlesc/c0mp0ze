@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+
+  transmission:
+    image: transmission
+    container_name: transmission
+    volumes:
+      - /dl:/var/lib/transmission-daemon/downloads
+    ports:
+      - '9091:9091'
+    restart: always

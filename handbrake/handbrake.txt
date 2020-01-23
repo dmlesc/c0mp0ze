@@ -1,0 +1,11 @@
+===========
+ handbrake
+===========
+
+mkdir data
+
+docker build -t handbrake .
+docker run -it --rm -v ./data:/data handbrake bash
+
+HandBrakeCLI -Z "Apple 720p30 Surround" -i test.mp4 -o test.m4v
+HandBrakeCLI -Z "Apple 1080p30 Surround" -i test.mp4 -o test.m4v
